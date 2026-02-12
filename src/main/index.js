@@ -1545,9 +1545,6 @@ function runApp() {
     relaunch()
   })
 
-  const USE_HARDWARE_ACCELERATION_PATH = `${userDataPath}/use-hardware-acceleration`
-  const useHardwareAccelerationFile = existsSync(USE_HARDWARE_ACCELERATION_PATH)
-
   ipcMain.handle(IpcChannels.GET_USE_HARDWARE_ACCELERATION, (event) => {
     if (isFreeTubeUrl(event.senderFrame.url)) {
       return useHardwareAccelerationFile
