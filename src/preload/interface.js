@@ -81,6 +81,17 @@ export default {
     ipcRenderer.send(IpcChannels.TOGGLE_REPLACE_HTTP_CACHE)
   },
 
+  /**
+   * @returns {Promise<boolean>}
+   */
+  getUseHardwareAcceleration: () => {
+    return ipcRenderer.invoke(IpcChannels.GET_USE_HARDWARE_ACCELERATION)
+  },
+
+  toggleUseHardwareAcceleration: () => {
+    ipcRenderer.send(IpcChannels.TOGGLE_USE_HARDWARE_ACCELERATION)
+  },
+
   // Allows programmatic toggling of picture-in-picture mode without accompanying user interaction.
   // See: https://developer.mozilla.org/en-US/docs/Web/Security/User_activation#transient_activation
   requestPiP: () => {

@@ -296,6 +296,15 @@ function runApp() {
     app.commandLine.appendSwitch('disable-http-cache')
   }
 
+  const USE_HARDWARE_ACCELERATION_PATH = `${userDataPath}/use-hardware-acceleration`
+  const useHardwareAccelerationFile = existsSync(USE_HARDWARE_ACCELERATION_PATH)
+  if (useHardwareAccelerationFile && process.platform === 'linux') {
+    // Enable VAAPI hardware acceleration on Linux
+    app.commandLine.appendSwitch('enable-features', 'VaapiVideoDecoder,VaapiVideoEncoder')
+    app.commandLine.appendSwitch('disable-features', 'UseChromeOSDirectVideoDecoder')
+    app.commandLine.appendSwitch('enable-accelerated-video-decode')
+  }
+
   const PLAYER_CACHE_PATH = `${userDataPath}/player_cache`
 
   // See: https://stackoverflow.com/questions/45570589/electron-protocol-handler-not-working-on-windows
@@ -1530,6 +1539,31 @@ function runApp() {
     } else {
       // create an empty file
       const handle = await asyncFs.open(REPLACE_HTTP_CACHE_PATH, 'w')
+      await handle.close()
+    }
+
+    relaunch()
+  })
+
+  const USE_HARDWARE_ACCELERATION_PATH = `${userDataPath}/use-hardware-acceleration`
+  const useHardwareAccelerationFile = existsSync(USE_HARDWARE_ACCELERATION_PATH)
+
+  ipcMain.handle(IpcChannels.GET_USE_HARDWARE_ACCELERATION, (event) => {
+    if (isFreeTubeUrl(event.senderFrame.url)) {
+      return useHardwareAccelerationFile
+    }
+  })
+
+  ipcMain.once(IpcChannels.TOGGLE_USE_HARDWARE_ACCELERATION, async (event) => {
+    if (!isFreeTubeUrl(event.senderFrame.url)) {
+      return
+    }
+
+    if (useHardwareAccelerationFile) {
+      await asyncFs.rm(USE_HARDWARE_ACCELERATION_PATH)
+    } else {
+      // create an empty file
+      const handle = await asyncFs.open(USE_HARDWARE_ACCELERATION_PATH, 'w')
       await handle.close()
     }
 

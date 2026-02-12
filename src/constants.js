@@ -34,6 +34,8 @@ const IpcChannels = {
 
   GET_REPLACE_HTTP_CACHE: 'get-replace-http-cache',
   TOGGLE_REPLACE_HTTP_CACHE: 'toggle-replace-http-cache',
+  GET_USE_HARDWARE_ACCELERATION: 'get-use-hardware-acceleration',
+  TOGGLE_USE_HARDWARE_ACCELERATION: 'toggle-use-hardware-acceleration',
 
   PLAYER_CACHE_GET: 'player-cache-get',
   PLAYER_CACHE_SET: 'player-cache-set',
